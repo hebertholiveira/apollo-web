@@ -1,0 +1,118 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Lists</ui:define>
+
+    <ui:define name="viewname">
+        <li>UI KIT</li>
+        <li>/</li>
+        <li>
+            <p:link outcome="/list">LISTS</p:link>
+        </li>
+    </ui:define>
+                
+    <ui:param name="viewname" value="LISTS" />
+
+    <ui:define name="content">
+        <h:form id="form_">
+        <div class="p-grid list-demo">
+            <div class="p-col-12">
+                <div class="card">
+                    <h5>DataView</h5>
+                    <table style="width:100%">
+                        <tr>
+                            <td style="width:25%">
+                                <p:outputLabel for="dpEstabelecimento" value="*Cliente:." />
+                                <br><p:selectOneMenu id="dpEstabelecimento" value="#{BeanDropdownViewClientes.idCliente}" style="width:95%">
+                                        <p:ajax listener="#{BeanDropdownViewClientes.carregarNegocios('11')}" update="dpNegocio" />   
+                                        <f:selectItem itemLabel="Selecione um cliente" itemValue="" noSelectionOption="true" />
+                                        <f:selectItems value="#{BeanDropdownViewClientes.clientes}" />
+                                </p:selectOneMenu></br>
+                            </td>
+                            <td>
+                                <p:outputLabel for="dpNegocio" value="Negócio:." />
+                                <br><p:selectOneMenu id="dpNegocio" value="#{BeanDropdownViewClientes.idNegocio}" style="width:95%">
+                                           <f:selectItem itemLabel="Selecione um negócio" itemValue="" noSelectionOption="true" />
+                                           <f:selectItems value="#{BeanDropdownViewClientes.negocios}" />
+                                </p:selectOneMenu></br>
+                            </td>
+                            
+                        </tr>
+                    </table>
+                     
+                    <p:dataView var="product" value="#{listDemoView.products}" gridIcon="pi pi-th-large" listIcon="pi pi-bars"
+                        paginator="true" rows="10" layout="grid" paginatorPosition="bottom">
+                        <p:dataViewGridItem>
+                            <div class="product-grid-item card">
+                                <div class="product-grid-item-top">
+                                    <div>
+                                        <i class="pi pi-tag product-category-icon"></i>
+                                        <span class="product-category">#{product.category}</span>
+                                    </div>
+                                    <span class="product-badge status-#{product.inventoryStatus.name().toLowerCase()}">#{product.inventoryStatus.text}</span>
+                                </div>
+                                <div class="product-grid-item-content">
+                                    <p:graphicImage name="images/product/#{product.image}" library="demo" />
+                                    <div class="product-name">#{product.name}</div>
+                                    <div class="product-description">#{product.description}</div>
+                                   
+                                </div>
+                                <div class="product-grid-item-bottom">
+                                    <h:outputText value="#{product.price}" styleClass="product-price">
+                                        <f:convertNumber currencySymbol="$" type="currency" />
+                                    </h:outputText>
+                                    <p:commandButton type="button" icon="pi pi-shopping-cart" disabled="#{product.inventoryStatus == 'OUTOFSTOCK'}"/>
+                                </div>
+                            </div>
+                        </p:dataViewGridItem>
+                
+                        <p:dataViewListItem>
+                            <div class="product-list-item">
+                                <p:graphicImage name="images/product/#{product.image}" library="demo" />
+                                <div class="product-list-detail">
+                                    <div class="product-name">#{product.name}</div>
+                                    <div class="product-description">#{product.description}</div>
+                                    <p:rating readonly="true" value="#{product.rating}" />
+                                    <i class="pi pi-tag product-category-icon"></i><span class="product-category">#{product.category}</span>
+                                </div>
+                                <div class="product-list-action">
+                                    <h:outputText value="#{product.price}" styleClass="product-price">
+                                        <f:convertNumber currencySymbol="$" type="currency" />
+                                    </h:outputText>
+                                    <p:commandButton type="button" icon="pi pi-shopping-cart" value="Add to Cart" disabled="#{product.inventoryStatus == 'OUTOFSTOCK'}"/>
+                                    <span class="product-badge status-#{product.inventoryStatus.name().toLowerCase()}">#{product.inventoryStatus.text}</span>
+                                </div>
+                            </div>
+                        </p:dataViewListItem>
+                    </p:dataView>
+                </div>
+            </div>
+
+            <div class="p-col-12 p-lg-8">
+                <div class="card">
+                    <h5>PickList</h5>
+                    <p:pickList id="pickList" value="#{listDemoView.cities1}" var="cities" itemLabel="#{cities}" itemValue="#{cities}"
+                                showSourceControls="true" showTargetControls="true" responsive="true">
+                        <f:facet name="sourceCaption">From</f:facet>
+                        <f:facet name="targetCaption">To</f:facet>
+                    </p:pickList>
+                </div>
+            </div>
+
+            <div class="p-col-12 p-lg-4">
+                <div class="card">
+                    <h5>OrderList</h5>
+                    <p:orderList value="#{listDemoView.cities2}" var="city" controlsLocation="left" itemLabel="#{city}" itemValue="#{city}" responsive="true">
+                        <f:facet name="caption">Cities</f:facet>
+                    </p:orderList>
+                </div>
+            </div>
+        </div>
+        </h:form>
+    </ui:define>
+
+</ui:composition>

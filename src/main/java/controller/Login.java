@@ -6,7 +6,10 @@
 package controller;
 
 import ModelApi.mApiMcRetorno;
+import ModelApi.mApiUsuario;
 import ModelApi.mHeaders;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import java.io.IOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
@@ -26,6 +29,7 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import java.lang.reflect.Type;
 
 /**
  *
@@ -71,9 +75,14 @@ public class Login implements Serializable
            if(objRetorno.getStatus() == 200)
            {
                //FacesContext.getCurrentInstance().getExternalContext().redirect("/dashboard.xhtml");
-                RedirePage = "/dashboard.xhtml?faces-redirect=true";
+               RedirePage = "/dashboard.xhtml?faces-redirect=true";
+               Gson gson = new Gson();
+               Type founderListType = new TypeToken<mApiUsuario>(){}.getType();
+               mApiUsuario obj_ = gson.fromJson(objRetorno.getJsonmc(),founderListType);
+               FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("AtivoID", obj_.getIdusuario());
+               FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put("Token", obj_.getToken());
+
            }else{
-              
                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Error", "401 - Não autorizado"));
            }
            Pass="";

@@ -18,4 +18,14 @@ public class Auxiliar
         FacesContext ctx = FacesContext.getCurrentInstance();
         return ctx.getExternalContext().getInitParameter(sContext_param);
     }
+    
+    public long GetUserID()
+    {
+       return (long) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("AtivoID");
+    }
+    
+    public String GetTokenSessao()
+    {
+       return (String) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get("Token");
+    }
 }
